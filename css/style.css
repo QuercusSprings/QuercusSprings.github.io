@@ -1371,7 +1371,6 @@ pre .javascript .function {
   display: inline-block;
 }
 
-/*Hexo-admonition*/
 .admonition {
   margin: 1.5625em 0;
   padding: .6rem;
@@ -1445,4 +1444,3 @@ p.admonition-title {
 .admonition>:last-child {
   margin-bottom: 0 !important;
 }
-/*Hexo-admonition*/

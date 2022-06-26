@@ -6,12 +6,12 @@
   
   <title>《The Rendering Equation》简译 | Quercus的技术记录</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta name="description" content="!!! info 信息    这是一篇经典论文，在其思想深刻影响后世的同时，部分表述已不再流行。   !!! attention 注意    因水平有限，本翻译部分参考机翻。并只进行了简单校对，未有精校，或有错译现象。    此文本仅供参考。   渲染方程SIGGRAPH 1986(1986.4)James T. Kajiya加州理工学院 摘要我们提出了一个集已知的渲染算法之大成的积分方程。在讨论">
+  <meta name="description" content="信息   这是一篇经典论文，在其思想深刻影响后世的同时，部分表述已不再流行。   注意   因水平有限，本翻译部分参考机翻。并只进行了简单校对，未有精校，或有错译现象。 此文本仅供参考。   渲染方程SIGGRAPH 1986(1986.4)James T. Kajiya加州理工学院 摘要我们提出了一个集已知的渲染算法之大成的积分方程。在讨论用蒙特卡洛法解决此问题时，我们也提出了一种新的样本方差减">
 <meta property="og:type" content="article">
 <meta property="og:title" content="《The Rendering Equation》简译">
 <meta property="og:url" content="https://quercussprings.github.io/2021/12/18/%E6%B8%B2%E6%9F%93%E6%96%B9%E7%A8%8B/index.html">
 <meta property="og:site_name" content="Quercus的技术记录">
-<meta property="og:description" content="!!! info 信息    这是一篇经典论文，在其思想深刻影响后世的同时，部分表述已不再流行。   !!! attention 注意    因水平有限，本翻译部分参考机翻。并只进行了简单校对，未有精校，或有错译现象。    此文本仅供参考。   渲染方程SIGGRAPH 1986(1986.4)James T. Kajiya加州理工学院 摘要我们提出了一个集已知的渲染算法之大成的积分方程。在讨论">
+<meta property="og:description" content="信息   这是一篇经典论文，在其思想深刻影响后世的同时，部分表述已不再流行。   注意   因水平有限，本翻译部分参考机翻。并只进行了简单校对，未有精校，或有错译现象。 此文本仅供参考。   渲染方程SIGGRAPH 1986(1986.4)James T. Kajiya加州理工学院 摘要我们提出了一个集已知的渲染算法之大成的积分方程。在讨论用蒙特卡洛法解决此问题时，我们也提出了一种新的样本方差减">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://quercussprings.github.io/2021/12/18/%E6%B8%B2%E6%9F%93%E6%96%B9%E7%A8%8B/THE%20RENDERING%20EQUATION0001.png">
 <meta property="og:image" content="https://quercussprings.github.io/2021/12/18/%E6%B8%B2%E6%9F%93%E6%96%B9%E7%A8%8B/%E6%B8%B2%E6%9F%93%E6%96%B9%E7%A8%8B.png">
@@ -50,7 +50,7 @@
 <meta property="og:image" content="https://quercussprings.github.io/2021/12/18/%E6%B8%B2%E6%9F%93%E6%96%B9%E7%A8%8B/fig5.png">
 <meta property="og:image" content="https://quercussprings.github.io/2021/12/18/%E6%B8%B2%E6%9F%93%E6%96%B9%E7%A8%8B/fig6.png">
 <meta property="article:published_time" content="2021-12-18T15:21:15.000Z">
-<meta property="article:modified_time" content="2022-06-26T11:43:21.051Z">
+<meta property="article:modified_time" content="2022-06-26T11:51:33.892Z">
 <meta property="article:author" content="Quercus">
 <meta property="article:tag" content="计算机图形学">
 <meta property="article:tag" content="经典论文">
@@ -140,8 +140,15 @@
     
     <div class="e-content article-entry" itemprop="articleBody">
       
-        <p>!!! info 信息<br>    这是一篇经典论文，在其思想深刻影响后世的同时，部分表述已不再流行。  </p>
-<p>!!! attention 注意<br>    因水平有限，本翻译部分参考机翻。并只进行了简单校对，未有精校，或有错译现象。<br>    此文本仅供参考。  </p>
+        <div class="admonition info"><p class="admonition-title">信息  
+</p><p>这是一篇经典论文，在其思想深刻影响后世的同时，部分表述已不再流行。</p>
+</div>
+
+<div class="admonition attention"><p class="admonition-title">注意  
+</p><p>因水平有限，本翻译部分参考机翻。并只进行了简单校对，未有精校，或有错译现象。
+此文本仅供参考。</p>
+</div>
+
 <h1 id="渲染方程"><a href="#渲染方程" class="headerlink" title="渲染方程"></a>渲染方程</h1><h5 id="SIGGRAPH-1986-1986-4"><a href="#SIGGRAPH-1986-1986-4" class="headerlink" title="SIGGRAPH 1986(1986.4)"></a>SIGGRAPH 1986(1986.4)</h5><h5 id="James-T-Kajiya"><a href="#James-T-Kajiya" class="headerlink" title="James T. Kajiya"></a>James T. Kajiya</h5><h5 id="加州理工学院"><a href="#加州理工学院" class="headerlink" title="加州理工学院"></a>加州理工学院</h5><p><img src="/2021/12/18/%E6%B8%B2%E6%9F%93%E6%96%B9%E7%A8%8B/THE%20RENDERING%20EQUATION0001.png" alt="ACM SIGGRAPH Computer Graphics, Volume 20, Issue 4, Aug. 1986, pp. 143–150, https://doi.org/10.1145/15886.15902, Title:The Rendering Equation"></p>
 <h3 id="摘要"><a href="#摘要" class="headerlink" title="摘要"></a>摘要</h3><p>我们提出了一个集已知的渲染算法之大成的积分方程。在讨论用蒙特卡洛法解决此问题时，我们也提出了一种新的样本方差减少方法，其称为“分层采样法”，并给出了有关此方法的详细阐述。由此产生的渲染算法扩展了可以有效模拟的光学现象的范围。</p>
 <h3 id="关键词"><a href="#关键词" class="headerlink" title="关键词"></a>关键词</h3><p>计算机图形学，光栅化，光线追踪，辐射度量学，蒙特卡洛法，分布式光线追踪，方差消减。</p>
@@ -229,7 +236,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://quercussprings.github.io/2021/12/18/%E6%B8%B2%E6%9F%93%E6%96%B9%E7%A8%8B/" data-id="cl4v8tdmi0000s8v95guifcoy" data-title="《The Rendering Equation》简译" class="article-share-link">分享</a>
+      <a data-url="https://quercussprings.github.io/2021/12/18/%E6%B8%B2%E6%9F%93%E6%96%B9%E7%A8%8B/" data-id="cl4v93v7k0000csv991xdfsa7" data-title="《The Rendering Equation》简译" class="article-share-link">分享</a>
       
       
       
