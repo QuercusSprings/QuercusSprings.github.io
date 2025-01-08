@@ -30,7 +30,7 @@
 <meta property="og:image" content="https://quercussprings.github.io/2023/07/10/leetbook%E7%AC%94%E8%AE%B0%EF%BC%88%E5%85%AD%EF%BC%89%E5%89%8D%E7%BC%80%E5%92%8C%E4%B8%8E%E5%B7%AE%E5%88%86%E4%B8%93%E9%A2%98/image-20240325111105465.png">
 <meta property="og:image" content="https://quercussprings.github.io/2023/07/10/leetbook%E7%AC%94%E8%AE%B0%EF%BC%88%E5%85%AD%EF%BC%89%E5%89%8D%E7%BC%80%E5%92%8C%E4%B8%8E%E5%B7%AE%E5%88%86%E4%B8%93%E9%A2%98/image-20240325114033203.png">
 <meta property="article:published_time" content="2023-07-10T13:40:55.000Z">
-<meta property="article:modified_time" content="2025-01-08T12:50:42.661Z">
+<meta property="article:modified_time" content="2025-01-08T12:53:02.972Z">
 <meta property="article:author" content="Quercus">
 <meta property="article:tag" content="前缀和">
 <meta property="article:tag" content="差分">
@@ -301,10 +301,10 @@
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function">vector&lt;<span class="hljs-type">int</span>&gt; <span class="hljs-title">sum</span><span class="hljs-params">(<span class="hljs-number">0</span>)</span></span>;<br><span class="hljs-function">vector&lt;<span class="hljs-type">int</span>&gt; <span class="hljs-title">a</span><span class="hljs-params">(<span class="hljs-number">0</span>)</span></span>;<br><span class="hljs-type">int</span> N;<br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">init</span><span class="hljs-params">()</span></span>&#123;<br>	<span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i=<span class="hljs-number">1</span>;i&lt;=N;i++)&#123;<br>		sum[i]=sum[i<span class="hljs-number">-1</span>]+a[i];<br>	&#125;<br>&#125;<br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">get_sum</span><span class="hljs-params">(<span class="hljs-type">int</span> left,<span class="hljs-type">int</span> right)</span></span>&#123;<br>	<span class="hljs-keyword">return</span> sum[right]-sum[left<span class="hljs-number">-1</span>];<br>&#125;<br><br></code></pre></td></tr></table></figure>
 <p>总体时间复杂度是O(n+m),我们把f(i)（sum[i]）称为前缀和函数（数组）</p>
 <h4 id="🚩二维前缀和"><a href="#🚩二维前缀和" class="headerlink" title="🚩二维前缀和"></a>🚩二维前缀和</h4><p>在一维前缀和之上，求一个矩阵内子矩阵的和，可以使用<strong>二维前缀和</strong></p>
-<p><img src="/2023/07/10/leetbook%E7%AC%94%E8%AE%B0%EF%BC%88%E5%85%AD%EF%BC%89%E5%89%8D%E7%BC%80%E5%92%8C%E4%B8%8E%E5%B7%AE%E5%88%86%E4%B8%93%E9%A2%98/image-20240325110039609.png" srcset="/img/loading.gif" lazyload alt="image-20240325110039609"></p>
+<p><img src="/2023/07/10/leetbook%E7%AC%94%E8%AE%B0%EF%BC%88%E5%85%AD%EF%BC%89%E5%89%8D%E7%BC%80%E5%92%8C%E4%B8%8E%E5%B7%AE%E5%88%86%E4%B8%93%E9%A2%98/image-20240325110039609.png" srcset="/img/loading.gif" lazyload alt></p>
 <h5 id="前缀和的计算"><a href="#前缀和的计算" class="headerlink" title="前缀和的计算"></a>前缀和的计算</h5><p>对于数组<code>a[i][j]</code>的前缀和数组<code>sum[i][j]</code>，有<code>sum[i][j]=sum[i-1][j]+sum[i][j-1]-sum[i-1][j-1]+a[i][j]</code></p>
 <p>其原理见图</p>
-<p><img src="/2023/07/10/leetbook%E7%AC%94%E8%AE%B0%EF%BC%88%E5%85%AD%EF%BC%89%E5%89%8D%E7%BC%80%E5%92%8C%E4%B8%8E%E5%B7%AE%E5%88%86%E4%B8%93%E9%A2%98/image-20240325111105465.png" srcset="/img/loading.gif" lazyload alt="image-20240325111105465"></p>
+<p><img src="/2023/07/10/leetbook%E7%AC%94%E8%AE%B0%EF%BC%88%E5%85%AD%EF%BC%89%E5%89%8D%E7%BC%80%E5%92%8C%E4%B8%8E%E5%B7%AE%E5%88%86%E4%B8%93%E9%A2%98/image-20240325111105465.png" srcset="/img/loading.gif" lazyload alt></p>
 <p>这样我们得到了从数组起点始到<code>sum[i][j]</code>的前缀和</p>
 <blockquote>
 <p>[!tip]</p>
@@ -320,7 +320,7 @@
 <p><code>sum[x2][y2]-sum[x1-1][y2]-sum[x2][y1-1]+sum[x1-1][y1-1]</code></p>
 <p>时间复杂度<code>O（1）</code></p>
 </blockquote>
-<p><img src="/2023/07/10/leetbook%E7%AC%94%E8%AE%B0%EF%BC%88%E5%85%AD%EF%BC%89%E5%89%8D%E7%BC%80%E5%92%8C%E4%B8%8E%E5%B7%AE%E5%88%86%E4%B8%93%E9%A2%98/image-20240325114033203.png" srcset="/img/loading.gif" lazyload alt="image-20240325114033203"></p>
+<p><img src="/2023/07/10/leetbook%E7%AC%94%E8%AE%B0%EF%BC%88%E5%85%AD%EF%BC%89%E5%89%8D%E7%BC%80%E5%92%8C%E4%B8%8E%E5%B7%AE%E5%88%86%E4%B8%93%E9%A2%98/image-20240325114033203.png" srcset="/img/loading.gif" lazyload alt></p>
 <h3 id="差分"><a href="#差分" class="headerlink" title="差分"></a>差分</h3><p>我们知道，前缀和是把当下的数字加上之前的和，不断累积，并且时间复杂度在O(1)之内的算法。那么如果希望一个序列某个或全部范围的元素都加上（减去）某个数，并且仍然希望时间复杂度是O(1)（这种问题O(n)的时间复杂度解决是简单的）。我们就要用差分的方法。</p>
 <p>差分可以说是前缀和的逆运算。</p>
 <p>我们使得下标为1时的差分数组<code>diff[1]=a[i]</code>，之后<code>diff[i]=a[i]-a[i-1]</code>。便可得到差分数组，将差分数组求前缀和，就能得到原数组。</p>
