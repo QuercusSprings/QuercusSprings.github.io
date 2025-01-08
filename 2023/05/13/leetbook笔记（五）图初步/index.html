@@ -1,0 +1,868 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/idx_img/code_115247.png">
+  <link rel="icon" href="/idx_img/code_115247.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Quercus">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="图简介 常见的图有三种：无向图、有向图、加权图  常见的存图法有三种  邻接矩阵  如果con[i] [j]的值为true，则有一个i-&gt;j的有向边  无向边则需要令con[i] [j] 和con[j] [i]都为true  该方法不适合稀疏图和大型图 12345678910&#x2F;&#x2F;邻接矩阵#define MaxVertexNum 100	&#x2F;&#x2F;顶点数目的最大值typedef char Verte">
+<meta property="og:type" content="article">
+<meta property="og:title" content="leetbook算法笔记（五）图初步">
+<meta property="og:url" content="https://quercussprings.github.io/2023/05/13/leetbook%E7%AC%94%E8%AE%B0%EF%BC%88%E4%BA%94%EF%BC%89%E5%9B%BE%E5%88%9D%E6%AD%A5/index.html">
+<meta property="og:site_name" content="Quercus的技术记录">
+<meta property="og:description" content="图简介 常见的图有三种：无向图、有向图、加权图  常见的存图法有三种  邻接矩阵  如果con[i] [j]的值为true，则有一个i-&gt;j的有向边  无向边则需要令con[i] [j] 和con[j] [i]都为true  该方法不适合稀疏图和大型图 12345678910&#x2F;&#x2F;邻接矩阵#define MaxVertexNum 100	&#x2F;&#x2F;顶点数目的最大值typedef char Verte">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://quercussprings.github.io/2023/05/13/leetbook%E7%AC%94%E8%AE%B0%EF%BC%88%E4%BA%94%EF%BC%89%E5%9B%BE%E5%88%9D%E6%AD%A5/image-20240124111618115.png">
+<meta property="og:image" content="https://quercussprings.github.io/2023/05/13/leetbook%E7%AC%94%E8%AE%B0%EF%BC%88%E4%BA%94%EF%BC%89%E5%9B%BE%E5%88%9D%E6%AD%A5/image-20240124111850825.png">
+<meta property="og:image" content="https://quercussprings.github.io/2023/05/13/leetbook%E7%AC%94%E8%AE%B0%EF%BC%88%E4%BA%94%EF%BC%89%E5%9B%BE%E5%88%9D%E6%AD%A5/image-20240124192046011.png">
+<meta property="og:image" content="https://quercussprings.github.io/2023/05/13/leetbook%E7%AC%94%E8%AE%B0%EF%BC%88%E4%BA%94%EF%BC%89%E5%9B%BE%E5%88%9D%E6%AD%A5/image-20240130110242618.png">
+<meta property="og:image" content="https://quercussprings.github.io/2023/05/13/leetbook%E7%AC%94%E8%AE%B0%EF%BC%88%E4%BA%94%EF%BC%89%E5%9B%BE%E5%88%9D%E6%AD%A5/image-20240130164137510.png">
+<meta property="article:published_time" content="2023-05-13T14:01:57.000Z">
+<meta property="article:modified_time" content="2025-01-08T12:49:26.665Z">
+<meta property="article:author" content="Quercus">
+<meta property="article:tag" content="图">
+<meta property="article:tag" content="DFS">
+<meta property="article:tag" content="BFS">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://quercussprings.github.io/2023/05/13/leetbook%E7%AC%94%E8%AE%B0%EF%BC%88%E4%BA%94%EF%BC%89%E5%9B%BE%E5%88%9D%E6%AD%A5/image-20240124111618115.png">
+  
+  
+  
+  <title>leetbook算法笔记（五）图初步 - Quercus的技术记录</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"quercussprings.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":"§"},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.2.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Quercus的技术记录</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/idx_img/TowerBabel.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="leetbook算法笔记（五）图初步"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-05-13 22:01" pubdate>
+          2023年5月13日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          2.5k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          21 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">leetbook算法笔记（五）图初步</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h2 id="图"><a href="#图" class="headerlink" title="图"></a>图</h2><h3 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h3><ul>
+<li><p>常见的图有三种：无向图、有向图、加权图</p>
+</li>
+<li><p>常见的存图法有三种</p>
+<ul>
+<li><p>邻接矩阵</p>
+<ul>
+<li><p>如果con[i] [j]的值为true，则有一个i-&gt;j的有向边</p>
+</li>
+<li><p>无向边则需要令con[i] [j] 和con[j] [i]都为true</p>
+</li>
+<li><p>该方法不适合稀疏图和大型图</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-comment">//邻接矩阵</span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> MaxVertexNum 100	<span class="hljs-comment">//顶点数目的最大值</span></span><br><span class="hljs-keyword">typedef</span> <span class="hljs-type">char</span> VertexType;	<span class="hljs-comment">//顶点的数据类型</span><br><span class="hljs-keyword">typedef</span> <span class="hljs-type">int</span> EdgeType;	<span class="hljs-comment">//带权图中边上权值的数据类型</span><br><span class="hljs-keyword">typedef</span> <span class="hljs-keyword">struct</span>&#123;<br>	VertexType Vex[MaxVertexNum];	<span class="hljs-comment">//顶点表</span><br>	EdgeType Edge[MaxVertexNum][MaxVertexNum];	<span class="hljs-comment">//邻接矩阵，边表</span><br>	<span class="hljs-type">int</span> vexnum, arcnum;	<span class="hljs-comment">//图的当前顶点数和弧树</span><br>&#125;MGraph;<br><br></code></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li><p>邻接表</p>
+<ul>
+<li><p>对于图，我们往往更加关注哪些点之间有连边，而不关注哪些点之间没有连边</p>
+</li>
+<li><p>对有向图G，把同一个顶点的所有<strong>出边</strong>放在一个列表中，那么N个顶点就有N个列表（没有出边也是空表）。这N个列表成为图G的邻接表</p>
+</li>
+<li><p>需要注意的是，每个顶点的出边单链表实际上存的是顶点下标，下标才能索引，值无法索引</p>
+</li>
+<li><p><img src="/2023/05/13/leetbook%E7%AC%94%E8%AE%B0%EF%BC%88%E4%BA%94%EF%BC%89%E5%9B%BE%E5%88%9D%E6%AD%A5/image-20240124111618115.png" srcset="/img/loading.gif" lazyload alt="image-20240124111618115"></p>
+</li>
+<li><p>对无向图，即可不分出入边，将所有邻边存入邻接表</p>
+</li>
+<li><p><img src="/2023/05/13/leetbook%E7%AC%94%E8%AE%B0%EF%BC%88%E4%BA%94%EF%BC%89%E5%9B%BE%E5%88%9D%E6%AD%A5/image-20240124111850825.png" srcset="/img/loading.gif" lazyload alt="image-20240124111850825"></p>
+</li>
+<li><p>链表可以手打，亦可以使用vector</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-comment">//不存放边权的邻接表</span><br>vector&lt;<span class="hljs-type">int</span>&gt; Adj[N];<br><span class="hljs-comment">/*****************/</span><br><span class="hljs-comment">//如果想建立边权，可以建立结构体Node，可以存放其他信息</span><br><span class="hljs-keyword">struct</span> <span class="hljs-title class_">Node</span>&#123;<br>    <span class="hljs-type">int</span> nxt;	<span class="hljs-comment">//边终点</span><br>    <span class="hljs-type">int</span> val;	<span class="hljs-comment">//边权</span><br>&#125;;<br>vector&lt;Node&gt; Adj[N];<br><span class="hljs-comment">//添加边 从i结点指向j权值为5</span><br>Adj[i].<span class="hljs-built_in">push_back</span>(<span class="hljs-built_in">node</span>(j,<span class="hljs-number">5</span>))<br></code></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>链式前向星存储</p>
+</li>
+</ul>
+<h3 id="图的遍历"><a href="#图的遍历" class="headerlink" title="图的遍历"></a>图的遍历</h3><h4 id="图的深度优先搜索法（DFS）"><a href="#图的深度优先搜索法（DFS）" class="headerlink" title="图的深度优先搜索法（DFS）"></a>图的深度优先搜索法（DFS）</h4><p>“一条路走到底，不撞南墙不回头”，可以在图中遍历所有顶点，和任意两点间的所有路径。</p>
+<ul>
+<li>遍历所有顶点<ul>
+<li>使用递归的隐式栈（先入后出）实现<img src="/2023/05/13/leetbook%E7%AC%94%E8%AE%B0%EF%BC%88%E4%BA%94%EF%BC%89%E5%9B%BE%E5%88%9D%E6%AD%A5/image-20240124192046011.png" srcset="/img/loading.gif" lazyload alt="image-20240124192046011"><ol>
+<li>元素A先入栈再出栈检查，通过标记检查a是否访问过。如没有，标记为“已访问”。</li>
+<li>将与A相接的所有点入栈待查，将栈顶元素如B取出检查，如第一步。</li>
+<li>将与B相接的所有点入栈待查，将栈顶元素取出待查。</li>
+<li>重复，如果所有元素都访问过则退到上一顶点，即继续取栈顶元素。</li>
+<li>重复，直到栈排空，意味着所有顶点都标记为已访问。</li>
+</ol>
+</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li>图的深度优先遍历的结果并不唯一</li>
+<li>遍历两点之间所有路径用DFS。遍历无向图路径时，需要标记重复路径，从栈中取出元素后若要回退要再把标记置为未访问。有向图不用。</li>
+</ul>
+<figure class="highlight gauss"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs gauss"><span class="hljs-comment">//图上DFS</span><br>typedef <span class="hljs-keyword">struct</span> <span class="hljs-type">graph</span> &#123;<br><br>&#125;<span class="hljs-keyword">Graph</span>;<br></code></pre></td></tr></table></figure>
+<h4 id="图的广度优先搜索法（BFS）"><a href="#图的广度优先搜索法（BFS）" class="headerlink" title="图的广度优先搜索法（BFS）"></a>图的广度优先搜索法（BFS）</h4><ul>
+<li>由于 图中存在环，和深度优先遍历一样，广度优先遍历也需要在遍历的时候记录已经遍历过的结点。特别注意：将结点添加到队列以后，一定要马上标记为「已经访问」，否则相同结点会重复入队，这一点在初学的时候很容易忽略。</li>
+</ul>
+<ul>
+<li>在无权图中，由于广度优先搜索本身特点，假如源点为<code>source</code>，只有在遍历到所有距离源点<code>source</code>距离为<code>d</code>的所有结点之后，才能遍历到任何距离源点为<code>d+1</code>距离的所有结点。</li>
+</ul>
+<ul>
+<li>所以通过BFS很容易得到从源点到目标结点的最短路径，在最短路径问题上BFS比DFS更加高效。</li>
+</ul>
+<h3 id="图的最短路径"><a href="#图的最短路径" class="headerlink" title="图的最短路径"></a>图的最短路径</h3><p>广度优先遍历用于求解<strong>无权图</strong>的最短路径。有两种方式，一是求所有路径取最短，二是直接取最短路径。</p>
+<p><img src="/2023/05/13/leetbook%E7%AC%94%E8%AE%B0%EF%BC%88%E4%BA%94%EF%BC%89%E5%9B%BE%E5%88%9D%E6%AD%A5/image-20240130110242618.png" srcset="/img/loading.gif" lazyload alt="image-20240130110242618"></p>
+<p>一，求所有路径取最短</p>
+<ul>
+<li>起点<code>a</code>入队列，取出队头路径最后一个元素（仍然是<code>a</code>），将其所有路径<code>[a,c] [a,d] [a,b]</code>放入队列。标记A出边已经被访问完全，队头<code>a</code>出队。</li>
+<li>取队头路径<code>[a,c]</code>最后一个元素<code>c</code>，将其路径<code>[a,c,e]</code>放入队列。标记c出边已经被访问完全，出队。</li>
+<li>取队头路径<code>[a,d]</code>最后一个元素<code>d</code>，重复。</li>
+<li>出完路径队列，取最小结果</li>
+</ul>
+<p>二、直接取最短路径</p>
+<ul>
+<li>其实无需出完路径队列，第一个抵达终点的路径就是最短路径。原理见<strong>图的广度优先搜索法（BFS）</strong>。</li>
+</ul>
+<p>如果是<strong>带权图</strong>就需要专门的算法。</p>
+<h4 id="Dijkstra算法"><a href="#Dijkstra算法" class="headerlink" title="Dijkstra算法"></a>Dijkstra算法</h4><p>带权有向，权非负的单源最短路径问题</p>
+<ul>
+<li>主要思想<ol>
+<li>对图设置集合<code>S</code>，存放已经被访问的顶点，然后从集合<code>non-S</code>中选择与<u>起点s</u>的最短距离最小的一个顶点<code>u</code>，访问并加入集合<code>S</code></li>
+<li>之后令<code>u</code>为中介点，优化起点s与所有u能访问的顶点v之间的最短距离。</li>
+<li>重复2. n次（n为顶点个数），直到集合S已经包含所有顶点。</li>
+</ol>
+</li>
+</ul>
+<h4 id="Bellman-Ford算法"><a href="#Bellman-Ford算法" class="headerlink" title="Bellman-Ford算法"></a>Bellman-Ford算法</h4><p>带权有向，无负权环的单源最短路径问题</p>
+<ul>
+<li>基础定理<ul>
+<li>在一个有N个顶点的非负权环图中，两点之间的最短路径最多经过N-1条边</li>
+<li>零权，正权环不会影响最短路径求解。负权环没有最短路径，BF算法不能计算，但可以检测负权环。</li>
+</ul>
+</li>
+<li>基本思路<ul>
+<li>对图中的边进行N-1轮操作，每轮都遍历图中所有边，记从源点可及的各个顶点为为数组<code>d[]</code></li>
+<li>对每条边<code>u-&gt;v</code>,若以u为中介点可以使得<code>d[v]</code>更小，就以现在的<code>d[u]+length[u-&gt;v]</code>更新<code>d[v]</code></li>
+</ul>
+</li>
+</ul>
+<h4 id="基于队列优化的Bellman-Ford算法-SPFA算法"><a href="#基于队列优化的Bellman-Ford算法-SPFA算法" class="headerlink" title="基于队列优化的Bellman-Ford算法(SPFA算法)"></a>基于队列优化的Bellman-Ford算法(SPFA算法)</h4><h4 id="Floyd-Warshall算法"><a href="#Floyd-Warshall算法" class="headerlink" title="Floyd-Warshall算法"></a>Floyd-Warshall算法</h4><p>所有结点对的最短路径问题</p>
+<h3 id="图的最小生成树"><a href="#图的最小生成树" class="headerlink" title="图的最小生成树"></a>图的最小生成树</h3><p>最小生成树是在一个给定的无向图G中求一棵树T，该树拥有G中的所有顶点，且所有边都是G中的边，还满足树边权之和最小。</p>
+<p>最小生成树有如下性质：</p>
+<ul>
+<li>最小生成树是树，所以边数等于顶点数-1，且树内一定无环。</li>
+<li>对于图G，其最小生成树可以不唯一，但其边权之和肯定唯一最小</li>
+<li>由于最小生成树是在无向图上生成的，所以其根节点可以是这棵树上的任意一个结点，为了使得根节点唯一，题目一般会给出根节点。</li>
+</ul>
+<h4 id="切分定理"><a href="#切分定理" class="headerlink" title="切分定理"></a>切分定理</h4><p>将图切为两个部分称之为一个<strong>切分</strong>，如图，其中(B,A,E)为一部分，(C,D)为另一部分。</p>
+<p>如果一条边连接的两个顶点属于切分的两个部分，这个边称为<strong>横切边</strong>。</p>
+<p><img src="/2023/05/13/leetbook%E7%AC%94%E8%AE%B0%EF%BC%88%E4%BA%94%EF%BC%89%E5%9B%BE%E5%88%9D%E6%AD%A5/image-20240130164137510.png" srcset="/img/loading.gif" lazyload alt="image-20240130164137510" style="zoom:80%;"></p>
+<p>切分定理指的是：</p>
+<p>​    在一幅连通带权无向图中，给定任意的切分，如果有一条横切边的权值严格小于所有其他横切边，那么这条边必然属于该图最小生成树中的一条边。</p>
+<p>这是Kruskal算法和Prim算法的理论支撑。此外，Kruskal和Prim算法都使用了贪心思想，只是贪心的重点不一样，可以带着这个特点去理解。有关贪心思想见贪心算法专题。</p>
+<h4 id="Kruskal算法"><a href="#Kruskal算法" class="headerlink" title="Kruskal算法"></a>Kruskal算法</h4><ul>
+<li><p>基本思想：</p>
+<ol>
+<li>初始状态先隐去图中的所有边，这样图中每个顶点都自成一个连通块，之后：</li>
+<li>对所有边按边权从小到大进行排序。</li>
+<li>按边权从小到大测试所有边，如果当前测试边所连接的两个顶点不在同一个就将这条测试边加入当前最小生成树中；否则舍弃边。</li>
+<li>重复执行步骤3. 直到最小生成树的边数等于总顶点数-1，此时最小生成树已完成；或是测试完所有边仍未达到边数要求，此时此图不连通。</li>
+</ol>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-comment">//todo Kruskal算法模板</span><br></code></pre></td></tr></table></figure>
+</li>
+</ul>
+<h4 id="Prim算法"><a href="#Prim算法" class="headerlink" title="Prim算法"></a>Prim算法</h4><ul>
+<li>基本思想：<ol>
+<li>对图设置集合<code>S</code>，存放已经被访问的顶点，然后从集合<code>non-S</code>中选择与<u>集合S</u>的最短距离最小的一个顶点<code>u</code>，访问并加入集合<code>S</code></li>
+<li>之后令<code>u</code>为中介点，优化所有从从<code>u</code>能到达的顶点<code>v</code>与集合<code>S</code>的最短距离.</li>
+<li>重复2. <code>n</code>次（<code>n</code>为顶点个数），直到<code>S</code>包含所有顶点</li>
+</ol>
+</li>
+</ul>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs awk"><span class="hljs-regexp">//</span>todo<br></code></pre></td></tr></table></figure>
+<ul>
+<li>Prim算法和Dijkstra算法思路相同，关注部分不同</li>
+</ul>
+<h3 id="图的拓扑排序和关键路径"><a href="#图的拓扑排序和关键路径" class="headerlink" title="图的拓扑排序和关键路径"></a>图的拓扑排序和关键路径</h3><h4 id="拓扑排序"><a href="#拓扑排序" class="headerlink" title="拓扑排序"></a>拓扑排序</h4><p>如果有向图G的任意顶点都无法通过一些有向边回到自身，那么称这个图为<strong>有向无环图</strong>。</p>
+<p>对有向无环图G的所有顶点排成一个线性序列，使得对G的任意两个顶点u、v，如果存在边u-&gt;v，那么在序列中u一定在v之前，这个序列称为<strong>拓扑序列</strong>。</p>
+<ul>
+<li><strong>kahn算法思路</strong><ol>
+<li>定义一个队列Q，将所有入度为零的结点加入队列</li>
+<li>取队首结点，输出。之后删去所有从它出发的边，并令这些边到达的顶点其入度-1。如果某个顶点的入度减为0则加入队列。</li>
+<li>反复进行2.操作，直到队列为空。如果队列为空时，入过队的节点数目恰好为N，说明拓扑排序成功。否则G中有环，排序失败。</li>
+</ol>
+</li>
+</ul>
+<h4 id="关键路径"><a href="#关键路径" class="headerlink" title="关键路径"></a>关键路径</h4><p>用顶点表示活动，边集表示活动间隔的有向图称为<strong>顶点活动网（AOV网）</strong></p>
+<p>用带权边集表示活动，顶点表示事件的有向图称为<strong>边活动网（AOE网）</strong></p>
+<p>逻辑正确的AOV网和AOE网都是有向无环图，如果给定AOV网中各个顶点活动需要的时间，就可以将AOV网转换成AOE网。</p>
+<p>AOE网解决两个问题：①从起始到终止需要多长时间②哪些路径上的活动是影响工程的关键。</p>
+<p>我们把AOE网中的最长路径称为<strong>关键路径</strong>，关键路径上的活动即是<strong>关键活动</strong>/</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" class="category-chain-item">数据结构与算法</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E5%9B%BE/" class="print-no-link">#图</a>
+      
+        <a href="/tags/DFS/" class="print-no-link">#DFS</a>
+      
+        <a href="/tags/BFS/" class="print-no-link">#BFS</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>leetbook算法笔记（五）图初步</div>
+      <div>https://quercussprings.github.io/2023/05/13/leetbook笔记（五）图初步/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Quercus</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2023年5月13日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2023/06/01/leetbook%E7%AC%94%E8%AE%B0%EF%BC%88%E6%8B%BE%E9%81%971%EF%BC%89%E6%95%B0%E5%AD%A6%E4%B8%8E%E4%BD%8D%E8%BF%90%E7%AE%97/" title="leetbook算法笔记（拾遗1）数学与位运算">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">leetbook算法笔记（拾遗1）数学与位运算</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/05/02/leetbook%E7%AC%94%E8%AE%B0%EF%BC%88%E5%9B%9B%EF%BC%89%E6%A0%91%E5%88%9D%E6%AD%A5%E3%80%81%E5%B9%B6%E6%9F%A5%E9%9B%86/" title="leetbook算法笔记（四）树初步、并查集">
+                        <span class="hidden-mobile">leetbook算法笔记（四）树初步、并查集</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
